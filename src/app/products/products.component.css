@@ -25,3 +25,41 @@
   margin-top: 10px;
   margin-bottom: 30px;
 }
+
+/* src/app/products/products.component.css */
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  box-shadow: 0 4px 8px #ee6e73;
+}
+
+.product-card {
+  width: 200px;
+  box-shadow: 0 4px 8px #ee6e73;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+}
+

@@ -292,6 +292,7 @@ ngOnInit() {
 }
 
 applyFilter(filter: { type: string; price: number; name?: string }) {
+  this.currentPage = 1;  // after applying new filters it should take the user to the first page
   this.filteredProducts = this.products.filter(p => {
     const typeMatch = !filter.type || p.type === filter.type;
     const priceMatch = p.price <= filter.price;
@@ -299,6 +300,22 @@ applyFilter(filter: { type: string; price: number; name?: string }) {
 
     return typeMatch && priceMatch && nameMatch;
   });
+}
+
+currentPage = 1;
+pageSize = 8;
+
+get paginatedFilteredProducts() {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  return this.filteredProducts.slice(startIndex, startIndex + this.pageSize);
+}
+
+get totalPages(): number {
+  return Math.ceil(this.filteredProducts.length / this.pageSize);
+}
+
+changePage(page: number): void {
+  this.currentPage = page;
 }
 
 
