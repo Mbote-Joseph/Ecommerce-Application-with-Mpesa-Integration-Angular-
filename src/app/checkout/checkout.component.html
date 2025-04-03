@@ -24,14 +24,20 @@
       <h5>Total: <strong>Ksh {{ getTotal() }}</strong></h5>
 
       <label class="form-label mt-3">Phone Number</label>
-      <input [(ngModel)]="phone" type="text" placeholder="2547XXXXXXXX" class="form-control w-50" />
+      <input [(ngModel)]="phone" type="text" placeholder="0792622515" class="form-control w-50" />
 
       <button class="btn btn-success mt-3" (click)="payWithMpesa()" [disabled]="isProcessing">
         {{ isProcessing ? 'Processing...' : 'Pay with M-Pesa' }}
       </button>
 
-      <div class="mt-3 text-success" *ngIf="message">
-        {{ message }}
+      <div class="mt-3" *ngIf="message">
+        <div class="alert" [ngClass]="{
+          'alert-success': message.includes('✅'),
+          'alert-danger': message.includes('❌'),
+          'alert-info': message.includes('🔄')
+        }">
+          {{ message }}
+        </div>
       </div>
     </div>
   </div>

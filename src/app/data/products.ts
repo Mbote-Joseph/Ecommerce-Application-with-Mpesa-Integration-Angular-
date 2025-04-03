@@ -19,7 +19,7 @@ export const PRODUCTS: Product[] = [
         id: 1,
         name: 'Prime Hydration',
         type: 'Drink',
-        price: 250,
+        price: 1,
         image: 'assets/prime.jpeg'
       },
       {

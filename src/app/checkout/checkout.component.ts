@@ -33,35 +33,68 @@ export class CheckoutComponent {
 
   payWithMpesa(): void {
     this.message = '';
-    if (!this.phone.startsWith('2547') || this.phone.length !== 12) {
-      alert('Enter a valid Safaricom phone number (format: 2547XXXXXXX)');
-      return;
-    }
-
-    const totalAmount = this.getTotal();
-    if (totalAmount <= 0) {
-      alert('Cart is empty.');
-      return;
-    }
-
     this.isProcessing = true;
 
-    this.paymentService.stkPush(this.phone, totalAmount).subscribe({
-      next: (response) => {
-        console.log('STK Push Response:', response);
-        this.message = '✅ STK Push sent! Check your phone.';
-        this.downloadReceipt();
-        this.cartService.clearCart();
-        this.cart = [];
+    // 🔁 Normalize phone to 2547XXXXXXXX format
+    let normalizedPhone = this.phone.trim();
+
+    if (normalizedPhone.startsWith('0') && normalizedPhone.length === 10) {
+      normalizedPhone = '254' + normalizedPhone.substring(1);
+    }
+
+    // 🚫 Invalid format check
+    if (!normalizedPhone.startsWith('2547') || normalizedPhone.length !== 12) {
+      alert('Enter a valid Safaricom phone number like 0792622515');
+      this.isProcessing = false;
+      return;
+    }
+
+    const amount = this.getTotal();
+
+    this.paymentService.stkPush(normalizedPhone, amount).subscribe({
+      next: (res) => {
+        const checkoutRequestID = res.data.CheckoutRequestID;
+        this.message = '📲 STK Push sent. Please complete payment on your phone.';
+        this.pollPaymentStatus(checkoutRequestID);
       },
-      error: (err) => {
-        console.error('STK Push Error:', err);
-        this.message = '❌ Payment failed: ' + (err.error?.message || 'Unknown error');
+      error: () => {
+        this.isProcessing = false;
+        this.message = '❌ Failed to initiate STK Push.';
       }
     });
   }
 
-  downloadReceipt(): void {
+  pollPaymentStatus(checkoutRequestID: string): void {
+    let attempts = 0;
+    const maxAttempts = 24; // 2 minutes
+    const interval = setInterval(() => {
+      this.paymentService.checkPaymentStatus(checkoutRequestID).subscribe({
+        next: (status) => {
+          if (status.resultCode === 0) {
+            clearInterval(interval);
+            this.isProcessing = false;
+            this.message = '✅ Payment successful! Generating receipt...';
+            setTimeout(() => this.generateReceipt(), 1000);
+          } else if (status.resultCode !== undefined && status.resultCode !== null) {
+            clearInterval(interval);
+            this.isProcessing = false;
+            this.message = '❌ Payment failed or was cancelled.';
+          }
+        },
+        error: () => {
+          // Waiting silently for response
+        }
+      });
+
+      if (++attempts >= maxAttempts) {
+        clearInterval(interval);
+        this.isProcessing = false;
+        this.message = '⚠️ Transaction timed out. It should not take more than 2 minutes.';
+      }
+    }, 5000); // 5 seconds interval
+  }
+
+  generateReceipt(): void {
     const doc = new jsPDF();
     doc.setFontSize(18);
     doc.text('Receipt - Food Order', 14, 22);
@@ -86,5 +119,8 @@ export class CheckoutComponent {
     const finalY = (doc as any).lastAutoTable?.finalY || 70;
     doc.text(`Grand Total: Ksh ${this.getTotal()}`, 14, finalY + 10);
     doc.save('receipt.pdf');
+
+    this.cartService.clearCart();
+    this.cart = [];
   }
-  }
+}
