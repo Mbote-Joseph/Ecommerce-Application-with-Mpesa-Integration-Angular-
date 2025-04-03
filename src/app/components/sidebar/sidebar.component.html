@@ -1,17 +1,18 @@
 <div class="bg-light border p-3 rounded shadow-sm">
-  <h5>Filter Foods 🍽️</h5>
+  <h5>Filter Products</h5>
 
-  <label>Food Type</label>
-  <select [(ngModel)]="selectedType" class="form-control mb-3" (change)="emitFilter()">
+  <label>Type</label>
+  <select class="form-control mb-2" [(ngModel)]="selectedType" (change)="emitFilter()">
     <option value="">All</option>
-    <option value="Burger">Burger</option>
-    <option value="Pizza">Pizza</option>
-    <option value="Drink">Drink</option>
+    <option *ngFor="let type of types" [value]="type">{{ type }}</option>
   </select>
 
-  <label>Max Price (Ksh)</label>
-  <input type="range" [(ngModel)]="maxPrice" min="50" max="1000" class="form-range" (change)="emitFilter()" />
+  <label>Max Price</label>
+  <input type="range" [(ngModel)]="maxPrice" min="0" max="1000" (change)="emitFilter()" class="form-range" />
   <p>Ksh {{ maxPrice }}</p>
 
-  <button class="btn btn-outline-secondary btn-sm mt-2" (click)="resetFilters()">Reset</button>
+  <label>Search by Name</label>
+  <input type="text" class="form-control mb-2" [(ngModel)]="searchName" (input)="emitFilter()" />
+
+  <button class="btn btn-sm btn-outline-secondary" (click)="resetFilter()">Reset</button>
 </div>

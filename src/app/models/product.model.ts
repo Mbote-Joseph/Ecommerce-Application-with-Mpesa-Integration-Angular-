@@ -16,7 +16,7 @@
 export interface Product {
   id: number;
   name: string;
-  type: string;
+  type: 'Drink' | 'Meal' | 'Snack' | 'Dessert' | 'Coffee';
   price: number;
   image: string;
 }

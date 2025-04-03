@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -9,18 +9,25 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  selectedType: string = '';
-  maxPrice: number = 1000;
+  @Input() types: string[] = [];
+  @Output() filterChange = new EventEmitter<{ type: string; price: number; name?: string }>();
 
-  @Output() filterChange = new EventEmitter<{ type: string; price: number }>();
+  selectedType: string = '';
+  maxPrice: number = 10000;
+  searchName: string = '';
 
   emitFilter() {
-    this.filterChange.emit({ type: this.selectedType, price: this.maxPrice });
+    this.filterChange.emit({
+      type: this.selectedType,
+      price: this.maxPrice,
+      name: this.searchName
+    });
   }
 
-  resetFilters() {
+  resetFilter() {
     this.selectedType = '';
-    this.maxPrice = 1000;
+    this.maxPrice = 10000;
+    this.searchName = '';
     this.emitFilter();
   }
 }
