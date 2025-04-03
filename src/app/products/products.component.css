@@ -18,9 +18,10 @@
   max-width: 300px;
   box-shadow: 0 4px 8px #ee6e73;
   transition: box-shadow 0.3s ease-in-out;
+  height: 400px;
 }
 
 .row{
-  margin-top: 30px;
+  margin-top: 10px;
   margin-bottom: 30px;
 }

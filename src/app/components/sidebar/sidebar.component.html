@@ -8,7 +8,7 @@
   </select>
 
   <label>Max Price</label>
-  <input type="range" [(ngModel)]="maxPrice" min="0" max="1000" (change)="emitFilter()" class="form-range" />
+  <input type="range" [(ngModel)]="maxPrice" min="0" max="10000" (change)="emitFilter()" class="form-range" />
   <p>Ksh {{ maxPrice }}</p>
 
   <label>Search by Name</label>

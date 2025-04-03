@@ -9,8 +9,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  @Input() types: string[] = [];
+  @Input() types: string[] = ['Drink', 'Meal' , 'Snack' , 'Dessert' , 'Coffee'];
   @Output() filterChange = new EventEmitter<{ type: string; price: number; name?: string }>();
+
 
   selectedType: string = '';
   maxPrice: number = 10000;
