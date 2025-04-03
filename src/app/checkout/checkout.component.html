@@ -1,42 +1,38 @@
 <div class="container mt-4">
-  <h3>🧾 Checkout</h3>
+  <h3>Checkout</h3>
 
-  <div *ngIf="cart.length === 0" class="alert alert-warning">Your cart is empty.</div>
+  <div *ngIf="cart.length === 0" class="alert alert-warning">
+    Your cart is empty.
+  </div>
 
   <div *ngIf="cart.length > 0">
-    <ul class="list-group mb-3">
-      <li *ngFor="let item of cart" class="list-group-item d-flex justify-content-between">
-        {{ item.name }}
-        <span>Ksh {{ item.price }}</span>
-      </li>
-    </ul>
-
-    <h5>Total: <strong>Ksh {{ getTotal() }}</strong></h5>
-
-    <div class="mt-3">
-      <label for="phone">📱 Phone Number</label>
-      <input
-        type="text"
-        id="phone"
-        [(ngModel)]="phone"
-        class="form-control w-50"
-        placeholder="e.g. 254712345678"
-      />
+    <div class="row g-3">
+      <div *ngFor="let item of cart" class="col-md-6">
+        <div class="card shadow-sm h-100 d-flex flex-row align-items-center p-2">
+          <img [src]="item.image" class="rounded me-3" width="80" height="80" style="object-fit: cover;" />
+          <div class="flex-grow-1">
+            <h6 class="mb-1">{{ item.name }}</h6>
+            <p class="mb-1">Qty: {{ item.quantity }}</p>
+            <p class="mb-1 text-muted">Ksh {{ item.price }} each</p>
+            <p class="mb-0 fw-bold">Total: Ksh {{ item.price * item.quantity }}</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button
-      class="btn btn-success mt-3"
-      (click)="payWithMpesa()"
-      [disabled]="isProcessing"
-    >
-      {{ isProcessing ? 'Processing...' : 'Pay with M-Pesa' }}
-    </button>
+    <div class="mt-4 border-top pt-3">
+      <h5>Total: <strong>Ksh {{ getTotal() }}</strong></h5>
 
-    <div *ngIf="message" class="mt-3 alert" [ngClass]="{
-      'alert-success': message.startsWith('✅'),
-      'alert-danger': message.startsWith('❌')
-    }">
-      {{ message }}
+      <label class="form-label mt-3">Phone Number</label>
+      <input [(ngModel)]="phone" type="text" placeholder="2547XXXXXXXX" class="form-control w-50" />
+
+      <button class="btn btn-success mt-3" (click)="payWithMpesa()" [disabled]="isProcessing">
+        {{ isProcessing ? 'Processing...' : 'Pay with M-Pesa' }}
+      </button>
+
+      <div class="mt-3 text-success" *ngIf="message">
+        {{ message }}
+      </div>
     </div>
   </div>
 </div>

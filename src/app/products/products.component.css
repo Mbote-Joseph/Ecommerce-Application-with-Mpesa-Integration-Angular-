@@ -23,7 +23,7 @@
 
 .row{
   margin-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 /* src/app/products/products.component.css */
@@ -59,7 +59,7 @@
 }
 
 .pagination button.active {
-  background-color: #007bff;
+  background-color: #ee6e73;
   color: white;
 }
 

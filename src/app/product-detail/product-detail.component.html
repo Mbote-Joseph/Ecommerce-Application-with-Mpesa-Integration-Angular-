@@ -1,0 +1,31 @@
+<div class="container mt-5">
+  <a routerLink="/" class="btn btn-outline-secondary mb-3">&larr; Back to Products</a>
+
+  <div class="row">
+    <div class="col-md-6">
+      <img [src]="product.image" class="img-fluid rounded shadow-sm mb-3 w-100" [alt]="product.name" />
+    </div>
+    <div class="col-md-6">
+      <h2>{{ product.name }}</h2>
+      <h4 class="text-success mb-3">Ksh {{ product.price }}</h4>
+      <p class="lead">This is a delicious {{ product.type.toLowerCase() }}. Perfect for your appetite!</p>
+      <button class="btn btn-primary btn-lg mt-3" (click)="addToCart(product)">
+        Add to Cart 🛒
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="relatedImages.length > 1" class="mt-5">
+    <h5>More Images</h5>
+    <div class="d-flex flex-wrap gap-3">
+      <img
+        *ngFor="let img of relatedImages"
+        [src]="img"
+        class="rounded border"
+        width="150"
+        height="120"
+        alt="Additional image"
+      />
+    </div>
+  </div>
+</div>
